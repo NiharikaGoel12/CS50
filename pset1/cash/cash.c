@@ -2,7 +2,7 @@
 #include <cs50.h>
 #include <math.h>
 
-void total_coins(float change)
+int total_coins(float change)
 {
     int cents = round(change * 100);
     int coin_count = 0;
@@ -33,7 +33,6 @@ void total_coins(float change)
         
     }
     
-    printf("%i\n", coin_count);
     return coin_count;
 }
 
@@ -46,7 +45,7 @@ int main(void)
         change = get_float("Change owned: ");
     }
     while (change <0);
-    total_coins(change);
+    printf("%i\n",total_coins(change));
     return 0;
 }
 
