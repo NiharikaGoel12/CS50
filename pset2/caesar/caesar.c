@@ -6,7 +6,7 @@
 void next_letter(string letter, int user_code)
 {
     int length_letter = strlen(letter);
-    char cipher_code[length_letter];
+    char cipher_code[length_letter+1];
     for (int i=0; i< length_letter; i++)
     {
         char l = (char)(letter[i]);
@@ -30,6 +30,7 @@ void next_letter(string letter, int user_code)
         }
 
     }
+    cipher_code[length_letter] = '\0';
     printf("ciphertext: %s\n", cipher_code);
 
 }
