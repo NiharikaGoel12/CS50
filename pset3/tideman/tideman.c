@@ -183,17 +183,14 @@ void sort_pairs(void)
             }
         }
     }
-
-    for(int i=0; i< pair_count; i++) {
-        printf("Pair: W=%s L=%s : diff=%d \n", candidates[pairs[i].winner], candidates[pairs[i].loser],preferences[pairs[i].winner][pairs[i].loser]);
-    }
-    return;
 }
+
+
 
 // Lock pairs into the candidate graph in order, without creating cycles
 void lock_pairs(void)
 {
-    for(int i=0; i<candidate_count; i++)
+    for(int i=0; i<pair_count; i++)
     {
         int winner=pairs[i].winner;
         int loser=pairs[i].loser;
@@ -209,7 +206,7 @@ bool lock_check(int winner, int loser)
 {
     if(locked[loser][winner]== true)
         return true;
-    for(int i=0; i< candidate_count; i++)
+    for(int i=0; i< pair_count; i++)
     {
         if(locked[i][winner]== true)
             {
