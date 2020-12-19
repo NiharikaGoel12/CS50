@@ -80,7 +80,7 @@ void blur(int height, int width, RGBTRIPLE image[height][width])
     {
         for(int j=0; j<width; j++)
         {
-            average_blur(i, j, image);
+            int blur_color = average_blur(i, j, image[height][width]);
             dup[i][j].rgbtBlue = (BYTE) blur_color;
             dup[i][j].rgbtGreen = (BYTE) blur_color;
             dup[i][j].rgbtRed = (BYTE) blur_color;
