@@ -1,6 +1,7 @@
 #include "helpers.h"
 #include <math.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 // Convert image to grayscale
 void grayscale(int height, int width, RGBTRIPLE image[height][width])
@@ -74,6 +75,40 @@ void reflect(int height, int width, RGBTRIPLE image[height][width])
 // Blur image
 void blur(int height, int width, RGBTRIPLE image[height][width])
 {
-
+    RGBTRIPLE(*dup)[width] = calloc(height, width * sizeof(RGBTRIPLE));
+    for(int i=0; i<height; i++)
+    {
+        for(int j=0; j<width; j++)
+        {
+            average_blur(i, j, image);
+            dup[i][j].rgbtBlue = (BYTE) blur_color;
+            dup[i][j].rgbtGreen = (BYTE) blur_color;
+            dup[i][j].rgbtRed = (BYTE) blur_color;
+        }
+    }
     return;
+}
+
+int average_blur(int i, int j, RGBTRIPLE image[height][width])
+{
+    int final_color = 0;
+    for(int k=-1; k<2; k++)
+    {
+        for(int l=-1; l<2; l++)
+        {
+            int m = i+k;
+            int n = j+l;
+            if((m>=0) && (n>=0) && (m<=height) && (n<=width))
+            {
+                int b = (int) image[m][n].rgbtBlue;
+                int g = (int) image[m][n].rgbtGreen;
+                int r = (int) image[m][n].rgbtRed;
+                int color_add = b+g+r;
+                final_color += color_add;
+            }
+
+        }
+    }
+    int blur_color = final_color/9;
+    return blur_color;
 }
