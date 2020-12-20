@@ -13,7 +13,7 @@ for(int i=0; i< height; i++)
         int b = (int) image[i][j].rgbtBlue;
         int g = (int) image[i][j].rgbtGreen;
         int r = (int) image[i][j].rgbtRed;
-        int grayscale = (b+g+r)/3;
+        int grayscale = round((b+g+r)/3.0);
         image[i][j].rgbtBlue = (BYTE) grayscale;
         image[i][j].rgbtGreen = (BYTE) grayscale;
         image[i][j].rgbtRed = (BYTE) grayscale;
@@ -56,11 +56,10 @@ void sepia(int height, int width, RGBTRIPLE image[height][width])
 // Reflect image horizontally
 void reflect(int height, int width, RGBTRIPLE image[height][width])
 {   int counter = width;
-    int midpoint = round((width/2) - 0.5);
     RGBTRIPLE temp;
     for(int i=0; i< height; i++)
     {
-        for(int j=0; j<=midpoint; j++)
+        for(int j=0; j<(width/2); j++)
         {
             temp = image[i][j];
             image[i][j] = image[i][counter-1];
@@ -72,6 +71,8 @@ void reflect(int height, int width, RGBTRIPLE image[height][width])
     return;
 }
 
+RGBTRIPLE average_blur(int i, int j, int height, int width, RGBTRIPLE image[height][width]);
+
 // Blur image
 void blur(int height, int width, RGBTRIPLE image[height][width])
 {
@@ -80,35 +81,49 @@ void blur(int height, int width, RGBTRIPLE image[height][width])
     {
         for(int j=0; j<width; j++)
         {
-            int blur_color = average_blur(i, j, image[height][width]);
-            dup[i][j].rgbtBlue = (BYTE) blur_color;
-            dup[i][j].rgbtGreen = (BYTE) blur_color;
-            dup[i][j].rgbtRed = (BYTE) blur_color;
+            dup[i][j] = average_blur(i, j, height, width, image);
+            //dup[i][j].rgbtBlue = (BYTE) blur_color;
+            // dup[i][j].rgbtGreen = (BYTE) blur_color;
+            // dup[i][j].rgbtRed = (BYTE) blur_color;
+        }
+    }
+    for(int i=0; i<height; i++)
+    {
+        for(int j=0; j<width; j++)
+        {
+            image[i][j] = dup[i][j];
         }
     }
     return;
 }
 
-int average_blur(int i, int j, RGBTRIPLE image[height][width])
+RGBTRIPLE average_blur(int i, int j, int height, int width, RGBTRIPLE image[height][width])
 {
-    int final_color = 0;
+    int R =0;
+    int B =0;
+    int G =0;
+    int counter =0;
     for(int k=-1; k<2; k++)
     {
         for(int l=-1; l<2; l++)
         {
             int m = i+k;
             int n = j+l;
-            if((m>=0) && (n>=0) && (m<=height) && (n<=width))
+            if((m>=0) && (n>=0) && (m<height) && (n<width))
             {
                 int b = (int) image[m][n].rgbtBlue;
                 int g = (int) image[m][n].rgbtGreen;
                 int r = (int) image[m][n].rgbtRed;
-                int color_add = b+g+r;
-                final_color += color_add;
+                R += r;
+                B += b;
+                G += g;
+                counter +=1;
             }
-
         }
     }
-    int blur_color = final_color/9;
-    return blur_color;
+    RGBTRIPLE color;
+    color.rgbtBlue = round((B/(counter*1.0)));
+    color.rgbtGreen = round((G/(counter*1.0)));
+    color.rgbtRed = round((R/(counter*1.0)));
+    return color;
 }
