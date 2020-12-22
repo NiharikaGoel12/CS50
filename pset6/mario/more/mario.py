@@ -7,18 +7,14 @@ def main():
         for i in range(pyramid_h):
             mario_left(pyramid_h, row_height)
             row_height +=1
-            #line = line.rstrip("\n")
-        #print("row_height:", row_height)
     else:
         exit()
 
 def mario_left(pyramid_h, row_height):
     for i in range(pyramid_h - row_height):
-        #print("checking diff value:", i)
         print(" ", end ="")
 
     for j in range(row_height):
-        #print("Current row_height number:", j)
         print("#", end ="")
 
     print("  ", end ="")
